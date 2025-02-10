@@ -231,7 +231,91 @@ SELECT * FROM employees WHERE salary > 60000;
 
 ---
 
-## **16. Solved SQL Problems**  
+## **16. Primary Key, UNIQUE, and NOT NULL Constraints**  
+
+### **1️⃣ Primary Key Constraint**  
+A **Primary Key** uniquely identifies each row in a table. It ensures:  
+✅ **Uniqueness** – No two rows can have the same primary key value.  
+✅ **Not Null** – A primary key column **cannot** have NULL values.  
+✅ **Automatic Indexing** – Optimizes search performance.  
+
+#### **Example: Creating a Table with a Primary Key**  
+```sql
+CREATE TABLE employees (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    salary INT
+);
+```
+- Here, `id` is the **Primary Key**, meaning **each employee must have a unique ID**, and it **cannot be NULL**.  
+
+#### **Another Way to Define a Primary Key**  
+```sql
+CREATE TABLE employees (
+    id INT,
+    name VARCHAR(50),
+    salary INT,
+    PRIMARY KEY (id)
+);
+```
+
+---
+
+### **2️⃣ UNIQUE Constraint**  
+The **UNIQUE** constraint ensures that all values in a column are **distinct**. Unlike the primary key, it allows **NULL values**.  
+
+#### **Example: Enforcing Unique Email Addresses**  
+```sql
+CREATE TABLE users (
+    user_id INT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE
+);
+```
+- Here, **each user must have a unique email**, but `email` **can be NULL** (unless NOT NULL is also specified).  
+
+---
+
+### **3️⃣ NOT NULL Constraint**  
+The **NOT NULL** constraint ensures that a column **cannot store NULL values**.  
+
+#### **Example: Ensuring Name is Always Provided**  
+```sql
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    phone_number VARCHAR(15)
+);
+```
+- Here, **`name` must always have a value**, but `phone_number` can be NULL.  
+
+---
+
+### **💡 Combining Constraints**  
+You can combine **UNIQUE** and **NOT NULL** to ensure a column has **only unique values and no NULLs**.  
+
+#### **Example: Unique and Mandatory Phone Numbers**  
+```sql
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    phone_number VARCHAR(15) UNIQUE NOT NULL
+);
+```
+- Now, every `phone_number` **must be unique** and **cannot be NULL**.  
+
+---
+
+### **🔎 Difference Between PRIMARY KEY and UNIQUE**
+| Feature         | PRIMARY KEY          | UNIQUE            |
+|---------------|--------------------|----------------|
+| **Uniqueness** | ✅ Ensures unique values | ✅ Ensures unique values |
+| **NULL Allowed?** | ❌ No (Always NOT NULL) | ✅ Yes (Can have NULLs) |
+| **Number of Constraints Allowed?** | ❗ Only **one** per table | ✅ Multiple UNIQUE constraints allowed |
+| **Indexing** | ✅ Automatically indexed | ✅ Indexed but not always automatic |  
+
+
+---
+
+## **17. Solved SQL Problems**  
 After completing the morning session, we practiced SQL problems based on the topics covered. Below is the **link** to the problems and **screenshots** of the solutions.  
 
 🔗 Problem 1 - https://leetcode.com/problems/recyclable-and-low-fat-products/description/?envType=study-plan-v2&envId=top-sql-50
@@ -273,15 +357,16 @@ After completing the morning session, we practiced SQL problems based on the top
 ### **Screenshots of Solution**  
 <img width="956" alt="image" src="https://github.com/user-attachments/assets/a3e2c2ac-1050-4197-9bde-1249101e1049" />
 
+
 ---
 
 
-## 17. **Additional Practice – SQL Joins**
+## 18. **Additional Practice – SQL Joins**
 We also solved a few queries related to JOINs, which were not taught in the session. Hence, we are not adding them to this document.
 
 ---
 
-## 18. **My Experience from the Session**
+## 19. **My Experience from the Session**
 
 Overall, the session was really good and had a great speed. I was able to understand all the topics since I already knew SQL and had practiced a lot.
 

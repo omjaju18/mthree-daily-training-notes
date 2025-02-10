@@ -18,6 +18,27 @@ If you need to find **all pink shirts**, instead of searching manually, you can 
 
 SQL does the same with data—helping you **store, manage, and retrieve** information efficiently.  
 
+### **Understanding Rows in SQL**
+In this analogy, a **row** represents a specific item of clothing in a section (table).  
+
+#### **Example: Shirts Table (SQL Table)**  
+| ID | Color | Size  | Type   |  
+|----|------|------|--------|  
+| 1  | Red  | Small  | Casual  |  
+| 2  | Blue  | Medium | Formal  |  
+| 3  | Pink  | Large  | Casual  |  
+
+Each **row** in the table represents **one shirt** with its properties (**color, size, and type**).
+
+---
+
+### **SQL Query Example**  
+To find all **Pink shirts**, you’d use:  
+```sql
+SELECT * FROM Shirts WHERE Color = 'Pink';
+```
+👉 This retrieves the **row(s)** where the color is **Pink**!  
+
 ---
 
 ## **1. What is a Database?**  
@@ -32,10 +53,7 @@ A **Database Management System (DBMS)** is software that helps users interact wi
 
 ## **3. Types of DBMS**  
 - **Relational DBMS (RDBMS)** – Uses tables (e.g., MySQL, PostgreSQL).  
-- **NoSQL DBMS** – Stores data in key-value pairs, documents, or graphs (e.g., MongoDB).  
-- **Hierarchical DBMS** – Organizes data in a tree structure (e.g., IBM IMS).  
-- **Network DBMS** – Uses a flexible relationship model (e.g., IDMS).  
-
+- **NoSQL DBMS** – Stores data in key-value pairs, documents, or graphs (e.g., MongoDB). 
 ---
 
 ## **4. SQL Example (Finding Pink Shirts in 400 Shirts)**  
@@ -69,7 +87,9 @@ Each **row** represents a clothing item, and **columns** store attributes like t
 To install **MySQL Workbench**:  
 1. Visit the **MySQL official website**.  
 2. Download and install **MySQL Workbench**.  
-3. Connect to the database and start running SQL queries.  
+3. Connect to the database and start running SQL queries.
+
+Refer the Link for more details - https://www.geeksforgeeks.org/how-to-install-sql-workbench-for-mysql-on-windows/
 
 ---
 
@@ -112,10 +132,6 @@ These **modify data inside tables**.
 ## **9. Difference Between TRUNCATE and DELETE**  
 - **DELETE** removes specific rows but allows rollback (undo).  
 - **TRUNCATE** removes all rows permanently and is faster.  
-
----
-
-Here’s the updated **README.md** file with the explanation for **Deep Copy vs. Shallow Copy**, including how changes in the original affect the copied table.  
 
 ---
 
@@ -218,8 +234,62 @@ SELECT * FROM employees WHERE salary > 60000;
 ## **16. Solved SQL Problems**  
 After completing the morning session, we practiced SQL problems based on the topics covered. Below is the **link** to the problems and **screenshots** of the solutions.  
 
-🔗 **[SQL Problem Set Link](#)** *(Replace with actual link)*  
+🔗 Problem 1 - https://leetcode.com/problems/recyclable-and-low-fat-products/description/?envType=study-plan-v2&envId=top-sql-50
 
-### **Screenshots of Solutions**  
-*(Attach screenshots here or provide links to images in your repository.)*  
+### **Screenshots of Solution**  
+<img width="959" alt="image" src="https://github.com/user-attachments/assets/126aa4fc-48cf-4982-acb2-7906f4175db1" />
+
+
+🔗 Problem 2 - https://leetcode.com/problems/find-customer-referee/description/?envType=study-plan-v2&envId=top-sql-50
+
+### **Screenshots of Solution**  
+<img width="959" alt="image" src="https://github.com/user-attachments/assets/9a91f297-cf57-4ca8-b7ba-66c133ace4b1" />
+
+
+
+🔗 Problem 3 - https://leetcode.com/problems/big-countries/description/?envType=study-plan-v2&envId=top-sql-50
+
+### **Screenshots of Solution**  
+<img width="958" alt="image" src="https://github.com/user-attachments/assets/9720f12f-2e51-4264-b144-72c3f65772e3" />
+
+
+
+🔗 Problem 4 - https://leetcode.com/problems/article-views-i/description/?envType=study-plan-v2&envId=top-sql-50
+
+### **Screenshots of Solution**  
+<img width="959" alt="image" src="https://github.com/user-attachments/assets/8cae51a5-7828-4ec8-a06b-e97de1edd118" />
+
+
+
+🔗 Problem 5 - https://leetcode.com/problems/invalid-tweets/description/?envType=study-plan-v2&envId=top-sql-50
+
+### **Screenshots of Solution**  
+<img width="956" alt="image" src="https://github.com/user-attachments/assets/6bc56d27-4063-4d3e-b3b5-1a2477ad76ee" />
+
+
+
+🔗 Problem 6 - https://leetcode.com/problems/not-boring-movies/description/?envType=study-plan-v2&envId=top-sql-50
+
+### **Screenshots of Solution**  
+<img width="956" alt="image" src="https://github.com/user-attachments/assets/a3e2c2ac-1050-4197-9bde-1249101e1049" />
+
+---
+
+
+## 17. **Additional Practice – SQL Joins**
+We also solved a few queries related to JOINs, which were not taught in the session. Hence, we are not adding them to this document.
+
+---
+
+## 18. **My Experience from the Session**
+
+Overall, the session was really good and had a great speed. I was able to understand all the topics since I already knew SQL and had practiced a lot.
+
+I also learned a few new concepts like:
+
+Cloning a table (Shallow Copy vs. Deep Copy)
+Creating a temporary table
+The most important takeaway was explaining SQL to a non-tech person with no prior knowledge.
+
+🔹 Thank you for the informative session! Looking forward to Day 2! 🚀
 

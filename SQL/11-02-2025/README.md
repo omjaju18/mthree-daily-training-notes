@@ -1,6 +1,4 @@
-# SQL Concepts and Queries  
-
-## 📅 Date: 11-02-2025  
+# **SQL Learning Documentation - 11-02-2025**  
 
 This document provides an overview of key SQL concepts, including bitwise operations, joins, ranking functions, and analytical queries.
 

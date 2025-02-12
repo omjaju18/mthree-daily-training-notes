@@ -56,14 +56,24 @@ FROM permissions;
 
 ## 📌 2. Bit Shifting Operations  
 
-### 🛠️ Table Creation  
+Bit shifting operations allow manipulation of integer values at the **binary level**. These operations include:
+
+- **Left Shift (`<<`)**: Multiplies the value by `2` for each shift.
+- **Right Shift (`>>`)**: Divides the value by `2` for each shift.
+
+Bit shifting is commonly used for **efficient mathematical calculations, performance optimizations, and working with binary data**.
+
+---
+
+## 🛠️ **Table Creation & Sample Data**
+
 ```sql
 CREATE TABLE bit_shift_demo (
     id INT PRIMARY KEY,
     value INT
 );
 ```
-### 🔹 Insert Sample Data  
+
 ```sql
 INSERT INTO bit_shift_demo (id, value) VALUES
 (1, 8),   -- Binary: 1000
@@ -71,18 +81,90 @@ INSERT INTO bit_shift_demo (id, value) VALUES
 (3, 16);  -- Binary: 10000
 ```
 
-### 🔹 Queries  
-- **Left Shift (Multiply by 2)**  
-```sql
-SELECT id, value, (value << 1) AS left_shift_1, (value << 2) AS left_shift_2 FROM bit_shift_demo;
-```
-✅ *Left shift (<<) doubles the value for each shift.*
+### 📋 **Sample Table Data**
 
-- **Right Shift (Divide by 2)**  
+| id | value | Binary Representation |
+|----|-------|-----------------------|
+| 1  | 8     | `1000`                |
+| 2  | 12    | `1100`                |
+| 3  | 16    | `10000`               |
+
+---
+
+## 🔹 **Left Shift (`<<`) - Multiplication by 2**
+
 ```sql
-SELECT id, value, (value >> 1) AS right_shift_1, (value >> 2) AS right_shift_2 FROM bit_shift_demo;
+SELECT id, value, 
+       (value << 1) AS left_shift_1, 
+       (value << 2) AS left_shift_2 
+FROM bit_shift_demo;
 ```
-✅ *Right shift (>>) halves the value for each shift.*
+
+### 🔹 **Output**
+
+| id | value | Binary | `value << 1` (Shift 1) | Binary | `value << 2` (Shift 2) | Binary  |
+|----|-------|--------|----------------|--------|----------------|---------|
+| 1  | 8     | `1000`  | 16             | `10000` | 32             | `100000`  |
+| 2  | 12    | `1100`  | 24             | `11000` | 48             | `110000`  |
+| 3  | 16    | `10000` | 32             | `100000` | 64             | `1000000`  |
+
+### 📌 **Explanation**
+- **Left shift (`<<`) shifts bits to the left**, filling the empty rightmost positions with `0`.  
+- Each shift **multiplies the value by 2**.
+
+🔹 **Example Calculation:**
+- `8 << 1` → `1000` → `10000` (Decimal **16**)
+- `8 << 2` → `1000` → `100000` (Decimal **32**)
+- `12 << 1` → `1100` → `11000` (Decimal **24**)
+
+✅ **Key Point**:  
+Each left shift `<< 1` **doubles** the number.
+
+---
+
+## 🔹 **Right Shift (`>>`) - Division by 2**
+
+```sql
+SELECT id, value, 
+       (value >> 1) AS right_shift_1, 
+       (value >> 2) AS right_shift_2 
+FROM bit_shift_demo;
+```
+
+### 🔹 **Output**
+
+| id | value | Binary | `value >> 1` (Shift 1) | Binary | `value >> 2` (Shift 2) | Binary  |
+|----|-------|--------|----------------|--------|----------------|---------|
+| 1  | 8     | `1000`  | 4              | `0100`  | 2              | `0010`   |
+| 2  | 12    | `1100`  | 6              | `0110`  | 3              | `0011`   |
+| 3  | 16    | `10000` | 8              | `01000` | 4              | `00100`  |
+
+### 📌 **Explanation**
+- **Right shift (`>>`) moves bits to the right**, discarding the rightmost bits.
+- Each shift **divides the value by 2**.
+
+🔹 **Example Calculation:**
+- `8 >> 1` → `1000` → `0100` (Decimal **4**)
+- `8 >> 2` → `1000` → `0010` (Decimal **2**)
+- `12 >> 1` → `1100` → `0110` (Decimal **6**)
+
+✅ **Key Point**:  
+Each right shift `>> 1` **halves** the number.
+
+---
+
+## 🔹 **Key Takeaways**
+### ✅ **Left Shift (`<<`)**
+- Moves bits to the **left**.
+- Fills empty rightmost positions with `0`.
+- **Multiplies** the number by `2^n` (where `n` is the number of shifts).
+- Example: `8 << 2` = `32` (Multiplied by `2^2` = `4`).
+
+### ✅ **Right Shift (`>>`)**
+- Moves bits to the **right**.
+- Discards the rightmost bits.
+- **Divides** the number by `2^n`.
+- Example: `12 >> 1` = `6` (Divided by `2^1` = `2`).
 
 ---
 
@@ -153,7 +235,7 @@ Here, the `Employees` table has employee details, and the `Departments` table co
 
 ---
 
-## 🔹 SQL Join Types  
+## 📌 4. SQL Joins
 
 ### 1️⃣ **INNER JOIN**  
 ✅ Retrieves only the records that have matching values in both tables.  
@@ -374,6 +456,130 @@ FROM Employees;
 ```
 ✅ *Classifies employees based on their salary range.*
 
+---
+
+## 📌 7. `UNION` and `UNION ALL` in SQL**  
+
+In SQL, `UNION` and `UNION ALL` are used to **combine results from two or more SELECT queries** into a **single result set**. However, they have key differences.
+
+---
+
+## 🛠️ **Table Setup & Sample Data**  
+
+Let's create two sample tables: **EmployeesIndia** and **EmployeesUSA**.
+
+```sql
+CREATE TABLE EmployeesIndia (
+    EmpID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Department VARCHAR(50)
+);
+
+CREATE TABLE EmployeesUSA (
+    EmpID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Department VARCHAR(50)
+);
+```
+
+### 🔹 **Insert Sample Data**  
+
+```sql
+INSERT INTO EmployeesIndia VALUES 
+(1, 'Amit', 'IT'),
+(2, 'Neha', 'HR'),
+(3, 'Raj', 'Finance');
+
+INSERT INTO EmployeesUSA VALUES 
+(2, 'John', 'HR'),
+(3, 'Mike', 'Finance'),
+(4, 'Emma', 'Marketing');
+```
+
+### 📋 **Data in Both Tables**  
+
+**`EmployeesIndia` Table**  
+
+| EmpID | Name  | Department |
+|-------|-------|------------|
+| 1     | Amit  | IT         |
+| 2     | Neha  | HR         |
+| 3     | Raj   | Finance    |
+
+**`EmployeesUSA` Table**  
+
+| EmpID | Name  | Department |
+|-------|-------|------------|
+| 2     | John  | HR         |
+| 3     | Mike  | Finance    |
+| 4     | Emma  | Marketing  |
+
+---
+
+## 🔹 **Using `UNION`** (Removes Duplicates)
+
+```sql
+SELECT * FROM EmployeesIndia  
+UNION  
+SELECT * FROM EmployeesUSA;
+```
+
+### ✅ **Output (Distinct Results)**  
+
+| EmpID | Name  | Department |
+|-------|-------|------------|
+| 1     | Amit  | IT         |
+| 2     | Neha  | HR         |
+| 2     | John  | HR         |
+| 3     | Raj   | Finance    |
+| 3     | Mike  | Finance    |
+| 4     | Emma  | Marketing  |
+
+### 🔍 **Explanation**
+- `UNION` **removes duplicate records** (based on all selected columns).
+- Even though **EmpID 2 (HR)** and **EmpID 3 (Finance)** appear in both tables, they are treated as **distinct rows** because of different names (`Neha` vs. `John` and `Raj` vs. `Mike`).
+
+---
+
+## 🔹 **Using `UNION ALL`** (Keeps Duplicates)
+
+```sql
+SELECT * FROM EmployeesIndia  
+UNION ALL  
+SELECT * FROM EmployeesUSA;
+```
+
+### ✅ **Output (All Records Including Duplicates)**  
+
+| EmpID | Name  | Department |
+|-------|-------|------------|
+| 1     | Amit  | IT         |
+| 2     | Neha  | HR         |
+| 3     | Raj   | Finance    |
+| 2     | John  | HR         |
+| 3     | Mike  | Finance    |
+| 4     | Emma  | Marketing  |
+
+### 🔍 **Explanation**
+- `UNION ALL` **does not remove duplicates**.
+- **All records from both tables are returned**, even if they are identical.
+
+---
+
+## 🔹 **Key Differences: `UNION` vs. `UNION ALL`**
+
+| Feature           | `UNION`        | `UNION ALL`    |
+|------------------|--------------|--------------|
+| **Removes Duplicates?** | ✅ Yes | ❌ No |
+| **Performance**  | ❌ Slower (because of duplicate removal) | ✅ Faster (direct merging) |
+| **Use Case**  | When you need unique values | When duplicates are acceptable |
+
+---
+
+## 🔹 **When to Use `UNION` vs. `UNION ALL`**
+- ✅ **Use `UNION`** when you need **distinct results** and don't want duplicates.  
+- ✅ **Use `UNION ALL`** when you want **all records** (including duplicates) for analysis, logs, or debugging.
+- 
 ---
 
 ## ** Solved SQL Problems**  

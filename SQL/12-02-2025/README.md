@@ -187,17 +187,67 @@ DELIMITER ;
 
 ---
 
+# 📌 ACID Properties in DBMS (with a Bank Example)
+
+ACID stands for **Atomicity, Consistency, Isolation, and Durability**, ensuring reliable database transactions. Let's understand each property with a **bank transaction example**.
+
+---
+
+## 🔹 1. Atomicity (All or Nothing)
+- Ensures that a transaction is **either fully completed or completely rolled back** if any part fails.
+- **Example**: Suppose Alice transfers **₹5000** to Bob’s account.
+  - ✅ **Step 1**: Deduct ₹5000 from Alice’s account.
+  - ✅ **Step 2**: Add ₹5000 to Bob’s account.
+  - ❌ If Step 2 fails (**e.g., database crash**), Step 1 must be **rolled back** to prevent money loss.
+  - **Outcome**: Either both steps succeed, or **none happen**.
+
+---
+
+## 🔹 2. Consistency (Valid State Before & After Transaction)
+- Ensures that the **database remains in a valid state** before and after a transaction.
+- **Example**: The bank ensures that the **total money remains unchanged**.
+  - **Before Transaction**:  
+    - Alice: ₹10,000, Bob: ₹5,000 (**Total: ₹15,000**)
+  - **After Transaction (Alice sends ₹5000 to Bob)**:  
+    - Alice: ₹5,000, Bob: ₹10,000 (**Total: ₹15,000**) ✅
+  - ❌ If a failure occurs, the database **must not enter an invalid state** (e.g., missing ₹5000).
+
+---
+
+## 🔹 3. Isolation (No Interference Between Transactions)
+- Ensures that **multiple transactions do not interfere** with each other.
+- **Example**:
+  - Alice is **transferring ₹5000 to Bob**.
+  - At the same time, **Bob is withdrawing ₹2000** from his account.
+  - ❌ If transactions are not properly isolated, Bob’s balance might show **inconsistent values**.
+  - ✅ **Solution**: Transactions should be executed **one after another** or managed using **locking mechanisms**.
+
+---
+
+## 🔹 4. Durability (Changes are Permanent)
+- Ensures that **once a transaction is committed, it is permanently stored**, even if the system crashes.
+- **Example**:
+  - Alice transfers **₹5000 to Bob**.
+  - The **transaction is successfully committed**.
+  - ❌ Even if the **bank server crashes**, the transfer **must not be lost**.
+  - ✅ **Solution**: The database writes the transaction to **non-volatile storage** (logs, backups).
+
+---
+
 ## 📌 Conclusion
-Foreign keys **enforce referential integrity**, prevent **inconsistent updates**, and help manage **data relationships** efficiently. Understanding **ER diagrams**, **normalization**, and **stored procedures** can further optimize database design.
+ACID properties ensure that **banking transactions are reliable**, preventing **data loss, inconsistency, and corruption**.
 
-Would you like an **ER diagram** to visualize normalization better? 🚀  
-Happy Learning! 🎯
-```
+| Property  | Without ACID (Issues) | With ACID (Solution) |
+|-----------|----------------------|----------------------|
+| **Atomicity** | Money deducted but not credited. | Transaction fully succeeds or rolls back. |
+| **Consistency** | System loses money. | Database remains valid before and after transactions. |
+| **Isolation** | Transactions mix up, showing wrong balances. | Transactions do not interfere with each other. |
+| **Durability** | Crashes erase transactions. | Committed changes are **permanently stored**. |
 
-This **README.md** file is structured, formatted, and well-documented for clarity. Let me know if you need any modifications! 🚀
+🚀 **ACID properties are the foundation of secure and reliable database management systems!**  
 
-## ** Solved SQL Problems**  
-After completing the morning session, we practiced SQL problems based on the topics covered. Below is the **link** to the problems and **screenshots** of the solutions.  
+---
+
 
 🔗 Problem 1 - https://leetcode.com/problems/replace-employee-id-with-the-unique-identifier/description/?envType=study-plan-v2&envId=top-sql-50
 

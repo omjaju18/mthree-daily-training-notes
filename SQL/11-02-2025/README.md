@@ -130,44 +130,116 @@ WHERE EXISTS (SELECT 1 FROM Orders O WHERE O.CustomerID = C.CustomerID);
 
 ---
 
-## 📌 4. SQL Joins (INNER, LEFT, RIGHT)  
+## 📌 4. SQL Joins (Inner Join, Left Join, Right Join)
 
-### 🛠️ Table Setup  
+---
+
+## 📌 Table Structure  
+
 ```sql
-CREATE TABLE Employees (EmpID INT PRIMARY KEY, Name VARCHAR(50), DeptID INT);
-CREATE TABLE Departments (DeptID INT PRIMARY KEY, DeptName VARCHAR(50));
+CREATE TABLE Employees (
+    EmpID INT PRIMARY KEY, 
+    Name VARCHAR(50), 
+    DeptID INT
+);
+
+CREATE TABLE Departments (
+    DeptID INT PRIMARY KEY, 
+    DeptName VARCHAR(50)
+);
 ```
 
-### 🔹 Queries  
-- **Inner Join (Common records only)**  
+Here, the `Employees` table has employee details, and the `Departments` table contains department information. The `DeptID` column acts as a foreign key linking employees to departments.
+
+---
+
+## 🔹 SQL Join Types  
+
+### 1️⃣ **INNER JOIN**  
+✅ Retrieves only the records that have matching values in both tables.  
+
 ```sql
 SELECT E.Name, D.DeptName 
 FROM Employees E
 INNER JOIN Departments D ON E.DeptID = D.DeptID;
 ```
-✅ *Returns only matching records.*
+🔹 **Example Output:**  
+| Name  | DeptName  |
+|--------|-----------|
+| John   | IT        |
+| Alice  | HR        |
+| Bob    | Sales     |
 
-- **Left Join (All Employees + Matching Departments)**  
+📌 **Explanation:**  
+- If an employee has a `DeptID` that exists in the `Departments` table, they will be included.  
+- Employees without a valid `DeptID` are **excluded**.  
+
+---
+
+### 2️⃣ **LEFT JOIN** (or **LEFT OUTER JOIN**)  
+✅ Retrieves **all records** from the left table (`Employees`) and the **matching** records from the right table (`Departments`). If no match is found, `NULL` is returned for the right table's columns.  
+
 ```sql
 SELECT E.Name, D.DeptName 
 FROM Employees E
 LEFT JOIN Departments D ON E.DeptID = D.DeptID;
 ```
-✅ *All employees appear, even if they have no department.*
+🔹 **Example Output:**  
+| Name   | DeptName  |
+|--------|-----------|
+| John   | IT        |
+| Alice  | HR        |
+| Bob    | Sales     |
+| Mark   | NULL      |
 
-- **Right Join (All Departments + Matching Employees)**  
+📌 **Explanation:**  
+- All employees appear, even those without a department (e.g., "Mark" has `NULL` under `DeptName` because no department exists for their `DeptID`).  
+
+---
+
+### 3️⃣ **RIGHT JOIN** (or **RIGHT OUTER JOIN**)  
+✅ Retrieves **all records** from the right table (`Departments`) and the **matching** records from the left table (`Employees`). If no match is found, `NULL` is returned for the left table's columns.  
+
 ```sql
 SELECT E.Name, D.DeptName 
 FROM Employees E
 RIGHT JOIN Departments D ON E.DeptID = D.DeptID;
 ```
-✅ *All departments appear, even if no employees belong to them.*
+🔹 **Example Output:**  
+| Name   | DeptName  |
+|--------|-----------|
+| John   | IT        |
+| Alice  | HR        |
+| Bob    | Sales     |
+| NULL   | Finance   |
+
+📌 **Explanation:**  
+- All departments appear, even those without employees (e.g., "Finance" appears with `NULL` under `Name` because no employee is assigned to this department).  
 
 ---
 
-## 📌 5. Ranking Functions (RANK(), DENSE_RANK())  
+## 🔹 Summary of Joins  
 
-### 🛠️ Table Setup  
+| Join Type    | Includes Non-Matching Records? | Which Table Shows All Records? |
+|-------------|----------------------------|---------------------------|
+| INNER JOIN  | ❌ No                         | Only matching records     |
+| LEFT JOIN   | ✅ Yes (from left table)      | Left (Employees)          |
+| RIGHT JOIN  | ✅ Yes (from right table)     | Right (Departments)       |
+
+---
+
+Here's a detailed explanation of **RANK()** and **DENSE_RANK()** with sample outputs.  
+
+---
+
+## 📌 5. SQL Ranking Functions  (RANK, DENSE_RANK)
+
+SQL provides ranking functions like **RANK()** and **DENSE_RANK()** to assign ranks to rows based on a specified order. These functions are useful in scenarios like leaderboard rankings, salary comparisons, and performance evaluations.
+
+---
+
+## 🛠️ Table Structure & Sample Data  
+
 ```sql
 CREATE TABLE Employees (
     EmployeeID INT PRIMARY KEY,
@@ -176,7 +248,7 @@ CREATE TABLE Employees (
     Salary DECIMAL(10,2)
 );
 ```
-### 🔹 Insert Sample Data  
+
 ```sql
 INSERT INTO Employees VALUES
 (1, 'John Doe', 'HR', 5000),
@@ -186,8 +258,20 @@ INSERT INTO Employees VALUES
 (5, 'Charlie Wilson', 'Finance', 4000);
 ```
 
-### 🔹 Queries  
-- **RANK() vs. DENSE_RANK()**  
+### 📋 Sample Table Data  
+
+| EmployeeID | Name           | Department | Salary  |
+|------------|---------------|------------|---------|
+| 1          | John Doe       | HR         | 5000    |
+| 2          | Jane Smith     | IT         | 7000    |
+| 3          | Alice Brown    | IT         | 7000    |
+| 4          | Bob Johnson    | Finance    | 6000    |
+| 5          | Charlie Wilson | Finance    | 4000    |
+
+---
+
+## 🔹 RANK() vs. DENSE_RANK()  
+
 ```sql
 SELECT 
     EmployeeID, 
@@ -197,9 +281,33 @@ SELECT
     DENSE_RANK() OVER (ORDER BY Salary DESC) AS DenseRankValue
 FROM Employees;
 ```
-✅ *RANK() skips ranks for duplicate salaries, while DENSE_RANK() assigns continuous ranks.*
 
-- **Using PARTITION BY (Rank per department)**  
+### 🔹 Output  
+
+| EmployeeID | Name           | Salary | RankValue | DenseRankValue |
+|------------|---------------|--------|-----------|---------------|
+| 2          | Jane Smith     | 7000   | 1         | 1             |
+| 3          | Alice Brown    | 7000   | 1         | 1             |
+| 4          | Bob Johnson    | 6000   | 3         | 2             |
+| 1          | John Doe       | 5000   | 4         | 3             |
+| 5          | Charlie Wilson | 4000   | 5         | 4             |
+
+### 📌 Explanation  
+
+- **RANK()**  
+  - Assigns the same rank to duplicate values.  
+  - **Skips ranks** after duplicates.  
+  - Example: Both `Jane Smith` and `Alice Brown` have a salary of `7000` and get rank **1**, but the next employee (`Bob Johnson`) is ranked **3** (skipping 2).  
+
+- **DENSE_RANK()**  
+  - Also assigns the same rank to duplicates.  
+  - **Does not skip ranks** after duplicates.  
+  - Example: `Jane Smith` and `Alice Brown` are ranked **1**, but the next employee (`Bob Johnson`) is ranked **2** instead of **3**.  
+
+---
+
+## 🔹 Ranking Within Departments  
+
 ```sql
 SELECT 
     EmployeeID, 
@@ -209,7 +317,33 @@ SELECT
     RANK() OVER (PARTITION BY Department ORDER BY Salary DESC) AS RankValue
 FROM Employees;
 ```
-✅ *Groups ranking separately per department.*
+
+### 🔹 Output  
+
+| EmployeeID | Name           | Department | Salary | RankValue |
+|------------|---------------|------------|--------|-----------|
+| 1          | John Doe       | HR         | 5000   | 1         |
+| 2          | Jane Smith     | IT         | 7000   | 1         |
+| 3          | Alice Brown    | IT         | 7000   | 1         |
+| 4          | Bob Johnson    | Finance    | 6000   | 1         |
+| 5          | Charlie Wilson | Finance    | 4000   | 2         |
+
+### 📌 Explanation  
+
+- `PARTITION BY Department` ensures that ranking is **calculated separately** for each department.  
+- `IT` has **two employees with salary 7000**, both getting **rank 1**.  
+- `Finance` has **two different salaries (6000 and 4000)**, so employees get **rank 1 and 2** accordingly.  
+
+---
+
+## 🔹 Summary  
+
+| Function      | Behavior |
+|--------------|------------------------------------------------|
+| **RANK()**   | Assigns the same rank to duplicates and **skips** numbers. |
+| **DENSE_RANK()** | Assigns the same rank to duplicates but **does not skip** numbers. |
+| **PARTITION BY** | Groups ranking separately within a category (e.g., department). |
+
 
 ---
 

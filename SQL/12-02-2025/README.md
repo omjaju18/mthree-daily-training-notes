@@ -112,17 +112,6 @@ CREATE TABLE Employees (
 
 ---
 
-## 📌 Summary
-- A **foreign key** establishes a relationship between two tables.
-- `ON DELETE` & `ON UPDATE` control behavior when referenced records change.
-- **CASCADE** propagates changes (**deletion or update**).
-- **SET NULL** ensures data remains but removes the reference.
-- **RESTRICT/NO ACTION** prevent changes if dependencies exist.
-
-🚀 **Foreign keys maintain consistency and integrity in relational databases!**
-
----
-
 ## 📌 Entity-Relationship Diagram (ER Diagram)  
 An **ER Diagram (ERD)** is a **visual representation** of a database structure, showing how different entities (**tables**) relate to each other.
 
@@ -148,30 +137,182 @@ An **ER Diagram (ERD)** is a **visual representation** of a database structure, 
 ✔ **One Department** can have **many Employees** (**1:M relationship**).  
 
 ---
+# 📌 Database Normalization Explained
 
-## 📌 Database Normalization Explained  
-**Normalization** organizes data to reduce redundancy and improve integrity.
+**Normalization** is the process of **organizing data** in a database to **reduce redundancy** and **improve data integrity**. It involves breaking a large table into **smaller, related tables** and defining relationships between them.
+
+---
+
+## 🔹 Why Normalize a Database?
+✅ **Reduces Data Redundancy** → Avoids storing the same data multiple times.  
+✅ **Improves Data Integrity** → Ensures accuracy and consistency.  
+✅ **Eliminates Anomalies** → Prevents insert, update, and delete issues.  
+✅ **Enhances Query Performance** → Reduces unnecessary data storage.
+
+---
+
+## 📌 Types of Normal Forms (NF)
+Normalization is done in stages, called **normal forms (NF)**. The most common forms are **1NF, 2NF, 3NF, and BCNF**.
 
 | **Normal Form** | **Key Rule** |
 |---------------|------------|
-| **1NF** | Atomic values (no multi-valued columns) |
-| **2NF** | No partial dependency (non-key attributes depend on full primary key) |
-| **3NF** | No transitive dependency (non-key attributes do not depend on another non-key attribute) |
-| **BCNF** | Every determinant must be a candidate key |
+| **1NF** | Atomic values (**No multi-valued columns**) |
+| **2NF** | No **partial dependency** (**Non-key attributes depend on the full primary key**) |
+| **3NF** | No **transitive dependency** (**Non-key attributes do not depend on another non-key attribute**) |
+| **BCNF** | Every determinant must be a **candidate key** |
+
+---
+
+## 🔹 1NF (First Normal Form) – Atomicity ✅
+A table is in **1NF** if:
+- **Each column contains atomic (indivisible) values**.
+- **No repeating groups or arrays**.
+
+### ❌ Example (Before 1NF):
+| StudentID | Name  | Courses       |
+|-----------|------|--------------|
+| 101       | Alice | Math, Science |
+| 102       | Bob   | English       |
+
+🔴 **Problem**: The "Courses" column contains **multiple values** → **violates 1NF**.
+
+### ✅ Solution (Convert to 1NF):
+| StudentID | Name  | Course  |
+|-----------|------|--------|
+| 101       | Alice | Math   |
+| 101       | Alice | Science |
+| 102       | Bob   | English |
+
+✔ **Each field has atomic values**.  
+✔ **No multi-valued columns** → **Now in 1NF**.
+
+---
+
+## 🔹 2NF (Second Normal Form) – No Partial Dependency ✅
+A table is in **2NF** if:
+- **It is already in 1NF**.
+- **All non-key attributes depend on the full primary key** (not just a part of it).
+
+### ❌ Example (Before 2NF):
+| StudentID | CourseID | StudentName | CourseName |
+|-----------|---------|------------|------------|
+| 101       | C1      | Alice      | Math       |
+| 101       | C2      | Alice      | Science    |
+
+🔴 **Problem**:  
+- `StudentName` depends **only on StudentID** (not CourseID).  
+- `CourseName` depends **only on CourseID** (not StudentID).  
+- **Partial dependency exists** → **violates 2NF**.
+
+### ✅ Solution (Convert to 2NF):
+**Student Table**  
+| StudentID | StudentName |
+|-----------|------------|
+| 101       | Alice      |
+
+**Course Table**  
+| CourseID | CourseName |
+|---------|-----------|
+| C1      | Math      |
+| C2      | Science   |
+
+**Enrollment Table** (Bridge Table)  
+| StudentID | CourseID |
+|-----------|---------|
+| 101       | C1      |
+| 101       | C2      |
+
+✔ **Now, each column depends on the full primary key** → **Now in 2NF**.
+
+---
+
+## 🔹 3NF (Third Normal Form) – No Transitive Dependency ✅
+A table is in **3NF** if:
+- **It is already in 2NF**.
+- **No transitive dependencies exist** (i.e., non-key attributes do not depend on another non-key attribute).
+
+### ❌ Example (Before 3NF):
+| StudentID | StudentName | CourseID | InstructorID | InstructorName |
+|-----------|------------|---------|--------------|---------------|
+| 101       | Alice      | C1      | I101        | Prof. John    |
+| 102       | Bob        | C2      | I102        | Prof. Smith   |
+
+🔴 **Problem**:  
+- `InstructorName` depends on `InstructorID`, **not StudentID or CourseID**.  
+- **Transitive dependency exists** → **violates 3NF**.
+
+### ✅ Solution (Convert to 3NF):
+**Student Table**  
+| StudentID | StudentName |
+|-----------|------------|
+| 101       | Alice      |
+| 102       | Bob        |
+
+**Course Table**  
+| CourseID | CourseName |
+|---------|-----------|
+| C1      | Math      |
+| C2      | Science   |
+
+**Instructor Table**  
+| InstructorID | InstructorName |
+|--------------|---------------|
+| I101        | Prof. John     |
+| I102        | Prof. Smith    |
+
+**Enrollment Table** (Bridge Table)  
+| StudentID | CourseID | InstructorID |
+|-----------|---------|--------------|
+| 101       | C1      | I101         |
+| 102       | C2      | I102         |
+
+✔ **Now, all attributes depend only on the primary key** → **Now in 3NF**.
+
+---
+
+## 📌 Summary: Normalization Steps
+| **Normal Form** | **Key Rule** | **Fix** |
+|---------------|------------|-------|
+| **1NF** | No multi-valued columns | Create separate rows for each value |
+| **2NF** | No partial dependency | Split tables based on full primary key |
+| **3NF** | No transitive dependency | Remove attributes that depend on non-key attributes |
 
 ---
 
 ## 📌 Stored Procedure in SQL: A Complete Guide  
-A **stored procedure** is a precompiled set of SQL statements stored in a database.
 
-### 🔹 Why Use Stored Procedures?
-✔ **Reusability** → Write once, use multiple times.  
-✔ **Performance Boost** → Reduces parsing and compilation overhead.  
-✔ **Security** → Can restrict access and prevent SQL injection.  
-✔ **Encapsulation** → Groups logic inside a single unit.  
-✔ **Reduces Network Traffic** → One execution is faster than multiple queries.  
+A **stored procedure** is a precompiled set of **SQL statements** stored in the database. It allows for reusability, better performance, and enhanced security by grouping multiple SQL operations into a single callable unit.
 
-### 🔹 Example:
+---
+
+## 🔹 Why Use Stored Procedures?
+| Feature           | Benefit                                              |
+|------------------|------------------------------------------------------|
+| ✅ **Reusability** | Write once, use multiple times.                     |
+| ✅ **Performance Boost** | Reduces parsing and compilation overhead.       |
+| ✅ **Security** | Can restrict access and prevent SQL injection.        |
+| ✅ **Encapsulation** | Groups logic inside a single unit.                |
+| ✅ **Reduced Network Traffic** | Running one procedure is faster than multiple queries. |
+
+---
+
+## 📌 Creating a Stored Procedure
+
+### 🛠️ Example Table
+```sql
+CREATE TABLE Employees (
+    EmpID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Salary DECIMAL(10,2),
+    Department VARCHAR(50)
+);
+```
+
+---
+
+## 🔹 Basic Stored Procedure (No Parameters)
+This procedure **fetches all records** from the `Employees` table.
+
 ```sql
 DELIMITER //
 
@@ -182,8 +323,128 @@ END //
 
 DELIMITER ;
 ```
-✅ **Usage**: `CALL GetAllEmployees();`  
-👉 Fetches all records from the `Employees` table.
+✅ **Usage:**  
+```sql
+CALL GetAllEmployees();
+```
+
+---
+
+## 🔹 Stored Procedure with Parameters
+
+### 1️⃣ **Input Parameter**
+We can pass values as parameters.
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE GetEmployeeByDept(IN dept_name VARCHAR(50))
+BEGIN
+    SELECT * FROM Employees WHERE Department = dept_name;
+END //
+
+DELIMITER ;
+```
+✅ **Usage:**  
+```sql
+CALL GetEmployeeByDept('IT');
+```
+✔ **Returns** → All employees from the given department.
+
+---
+
+### 2️⃣ **Output Parameter**
+We can return a value using an `OUT` parameter.
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE GetMaxSalary(OUT max_salary DECIMAL(10,2))
+BEGIN
+    SELECT MAX(Salary) INTO max_salary FROM Employees;
+END //
+
+DELIMITER ;
+```
+✅ **Usage:**  
+```sql
+CALL GetMaxSalary(@salary);
+SELECT @salary;
+```
+✔ **Stores** the **maximum salary** in `@salary`.
+
+---
+
+### 3️⃣ **Input & Output Parameters Combined**
+This procedure **calculates the total salary** of a department.
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE GetTotalSalary(IN dept_name VARCHAR(50), OUT total_salary DECIMAL(10,2))
+BEGIN
+    SELECT SUM(Salary) INTO total_salary FROM Employees WHERE Department = dept_name;
+END //
+
+DELIMITER ;
+```
+✅ **Usage:**  
+```sql
+CALL GetTotalSalary('HR', @total);
+SELECT @total;
+```
+✔ **Returns** → Total salary of the specified department.
+
+---
+
+## 📌 Stored Procedure with **IF-ELSE** Logic
+This procedure **categorizes** an employee’s salary as **High** or **Low**.
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE GetSalaryStatus(IN emp_id INT, OUT status VARCHAR(20))
+BEGIN
+    DECLARE emp_salary DECIMAL(10,2);
+    
+    SELECT Salary INTO emp_salary FROM Employees WHERE EmpID = emp_id;
+    
+    IF emp_salary >= 7000 THEN
+        SET status = 'High Salary';
+    ELSE
+        SET status = 'Low Salary';
+    END IF;
+END //
+
+DELIMITER ;
+```
+✅ **Usage:**  
+```sql
+CALL GetSalaryStatus(2, @status);
+SELECT @status;
+```
+✔ **Returns** → `"High Salary"` or `"Low Salary"`.
+
+---
+---
+
+## 📌 Dropping a Stored Procedure
+If you want to delete a stored procedure:
+
+```sql
+DROP PROCEDURE IF EXISTS GetAllEmployees;
+```
+✅ **Effect:** → Deletes the `GetAllEmployees` procedure.
+
+---
+
+## 🔹 Advantages of Stored Procedures
+| Feature        | Benefit                                          |
+|---------------|--------------------------------------------------|
+| 🚀 **Performance** | Precompiled and optimized execution.         |
+| 🔒 **Security** | Prevents SQL injection and controls access.    |
+| 🔄 **Reusability** | Reduces code duplication.                    |
+| 🛠️ **Consistency** | Centralizes business logic.                 |
 
 ---
 
@@ -234,147 +495,104 @@ ACID stands for **Atomicity, Consistency, Isolation, and Durability**, ensuring 
 
 ---
 
-## 📌 Conclusion
-ACID properties ensure that **banking transactions are reliable**, preventing **data loss, inconsistency, and corruption**.
+# **Indexes in SQL: A Complete Guide**  
 
-| Property  | Without ACID (Issues) | With ACID (Solution) |
-|-----------|----------------------|----------------------|
-| **Atomicity** | Money deducted but not credited. | Transaction fully succeeds or rolls back. |
-| **Consistency** | System loses money. | Database remains valid before and after transactions. |
-| **Isolation** | Transactions mix up, showing wrong balances. | Transactions do not interfere with each other. |
-| **Durability** | Crashes erase transactions. | Committed changes are **permanently stored**. |
-
-🚀 **ACID properties are the foundation of secure and reliable database management systems!**  
+## 🔹 **What is an Index in SQL?**  
+An **index** in SQL is a database object that improves the speed of data retrieval operations. It works like an index in a book, helping the database locate rows quickly without scanning the entire table.  
 
 ---
 
+## 🔹 **Why Use Indexes?**  
+✅ **Faster Queries** → Speeds up `SELECT` queries by reducing search time.  
+✅ **Efficient Sorting** → Optimizes `ORDER BY` and `GROUP BY` operations.  
+✅ **Quick Lookups** → Enhances `WHERE`, `JOIN`, and `LIKE` conditions.  
+✅ **Improved Performance** → Reduces I/O operations and CPU usage.  
+💡 **Note:** While indexes speed up **read** operations, they **slow down write** operations (`INSERT`, `UPDATE`, `DELETE`) due to index maintenance.  
 
-🔗 Problem 1 - https://leetcode.com/problems/replace-employee-id-with-the-unique-identifier/description/?envType=study-plan-v2&envId=top-sql-50
+---
 
-```sql
-SELECT euni.unique_id, e.name 
-FROM Employees  e
-LEFT JOIN EmployeeUNI  euni
-ON e.id = euni.id;
-```
+## 📌 **Types of Indexes in SQL**  
 
-### **Screenshots of Solution**  
-<img width="959" alt="image" src="https://github.com/user-attachments/assets/c7911ccd-6013-425f-b68b-4b259d382093" />
+| **Index Type**      | **Description**                                        |
+|--------------------|------------------------------------------------|
+| **Primary Index**   | Automatically created for the **primary key**. |
+| **Unique Index**    | Ensures all values in a column are **unique**. |
+| **Non-Unique Index**| Speeds up searches but **allows duplicates**. |
+| **Composite Index** | Index on **multiple columns** for better performance. |
+| **Clustered Index** | **Physically sorts** table rows. Only **one per table**. |
+| **Non-Clustered Index** | **Logical ordering** without affecting physical data. Multiple per table. |
 
+---
 
+## 📌 **Creating Indexes in SQL**  
 
-
-🔗 Problem 2 - https://leetcode.com/problems/product-sales-analysis-i/?envType=study-plan-v2&envId=top-sql-50
-
-```sql
-select p.product_name, s.year, s.price
-from sales s
-left join Product p
-on s.product_id=p.product_id
-```
-
-### **Screenshots of Solution**  
-<img width="952" alt="image" src="https://github.com/user-attachments/assets/0ef24fdc-196d-4334-aa36-4f07d5e603e9" />
-
-
-
-🔗 Problem 3 - https://leetcode.com/problems/rising-temperature/description/?envType=study-plan-v2&envId=top-sql-50
+### 🔹 **1. Primary Index (Automatically Created)**  
+A **primary index** is created automatically when defining a `PRIMARY KEY`.  
 
 ```sql
-SELECT w1.id
-FROM Weather w1
-JOIN Weather w2
-ON DATEDIFF(w1.recordDate, w2.recordDate) = 1
-WHERE w1.temperature > w2.temperature;
+CREATE TABLE Employees (
+    EmpID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Salary DECIMAL(10,2),
+    Department VARCHAR(50)
+);
 ```
+✔ **Effect** → A **clustered index** is automatically created on `EmpID` since it’s the primary key.  
 
-### **Screenshots of Solution**  
-<img width="959" alt="image" src="https://github.com/user-attachments/assets/bea08393-2468-4a51-8975-0ff44a1aeed9" />
+---
 
-
-
-🔗 Problem 4 - https://leetcode.com/problems/customer-who-visited-but-did-not-make-any-transactions/?envType=study-plan-v2&envId=top-sql-50
+### 🔹 **2. Unique Index (Prevents Duplicates)**  
+A **unique index** ensures that a column does **not** contain duplicate values.  
 
 ```sql
-SELECT V.customer_id , COUNT(*) AS count_no_trans
-FROM VISITS V
-LEFT JOIN Transactions T
-ON V.visit_id = T.visit_id
-WHERE T.amount is null
-group by V.customer_id;
+CREATE UNIQUE INDEX idx_unique_email ON Employees (Email);
 ```
+✔ **Effect** → Prevents duplicate emails from being inserted.  
 
-### **Screenshots of Solution**  
-<img width="959" alt="image" src="https://github.com/user-attachments/assets/ad1f75a6-52e7-43a5-af4c-bdfa23e44181" />
+---
 
-
-
-🔗 Problem 5 - https://leetcode.com/problems/employee-bonus/description/?envType=study-plan-v2&envId=top-sql-50
+### 🔹 **3. Clustered Index (Sorts Data Physically)**  
+A **clustered index** sorts and stores the data **physically** based on the column.  
 
 ```sql
-SELECT e.name, b.bonus 
-FROM Employee e
-LEFT JOIN Bonus b ON e.empId = b.empId
-WHERE b.bonus < 1000 OR b.bonus IS NULL;
+CREATE CLUSTERED INDEX idx_salary ON Employees (Salary);
 ```
+✔ **Effect** → The table will be **physically sorted** based on `Salary`.  
+✔ **Only one clustered index** can exist per table.  
 
-### **Screenshots of Solution**  
-<img width="953" alt="image" src="https://github.com/user-attachments/assets/0477096d-0aad-46fa-9487-00ad995ea739" />
+---
 
-
-
-🔗 Problem 6 - https://leetcode.com/problems/managers-with-at-least-5-direct-reports/description/?envType=study-plan-v2&envId=top-sql-50
+### 🔹 **4. Non-Clustered Index (Separate Structure)**  
+A **non-clustered index** speeds up searches **without changing the physical order** of data.  
 
 ```sql
-SELECT m.name
-FROM employee e
-JOIN employee m ON e.managerId = m.id 
-GROUP BY e.managerId
-HAVING COUNT(*) >= 5;
+CREATE INDEX idx_name ON Employees (Name);
 ```
+✔ **Effect** → Optimizes searches on `Name` **without affecting the table’s physical order**.  
+✔ **Multiple non-clustered indexes** can exist per table.  
 
-### **Screenshots of Solution**  
-<img width="959" alt="image" src="https://github.com/user-attachments/assets/d62f80ac-e688-460d-8133-bbe501a9440f" />
+---
 
-
-
-🔗 Problem 7 - https://leetcode.com/problems/not-boring-movies/description/?envType=study-plan-v2&envId=top-sql-50
+## 📌 **Dropping an Index**  
+If an index is **no longer needed**, drop it to free up space.  
 
 ```sql
-select * from cinema 
-where description != "boring" and id % 2 !=0
-order by rating desc;
+DROP INDEX idx_name ON Employees;
 ```
+✔ **Effect** → Removes the `idx_name` index.  
 
-### **Screenshots of Solution**  
-<img width="943" alt="image" src="https://github.com/user-attachments/assets/04fc2808-9535-4d11-9dec-c392b938ebeb" />
+---
 
+## 📌 **When to Use Indexes?**  
 
-🔗 Problem 8 - https://leetcode.com/problems/number-of-unique-subjects-taught-by-each-teacher/description/?envType=study-plan-v2&envId=top-sql-50
+### ✅ **Use indexes when:**  
+✔ Columns are **frequently used** in `WHERE`, `ORDER BY`, or `JOIN` clauses.  
+✔ Queries **return a small subset** of rows (not the entire table).  
+✔ You need **fast searching** in large tables.  
 
-```sql
-select teacher_id, count(distinct subject_id) as cnt from Teacher group by teacher_id;
-```
-
-### Screenshots of Solution
-<img width="959" alt="image" src="https://github.com/user-attachments/assets/a99fa1c3-125c-4aab-9444-51e7404bdf62" />
-
-
-🔗 Problem 9 - https://leetcode.com/problems/biggest-single-number/description/?envType=study-plan-v2&envId=top-sql-50
-
-```sql
-SELECT MAX(num) AS num 
-FROM (
-    SELECT num 
-    FROM MyNumbers
-    GROUP BY num
-    HAVING COUNT(num) = 1
-) AS unique_numbers;
-```
-
-### **Screenshots of Solution**  
-<img width="959" alt="image" src="https://github.com/user-attachments/assets/63379c8e-643b-4067-a259-d8cfa37f6d39" />
-
-
+### ❌ **Avoid indexes when:**  
+✘ Tables are **small** (indexing adds unnecessary overhead).  
+✘ Columns have **frequent updates** (index maintenance slows writes).  
+✘ The column has **low uniqueness** (e.g., `Gender`, `Yes/No` values).  
 
 ---

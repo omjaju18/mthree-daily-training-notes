@@ -291,6 +291,121 @@ git push origin --delete <branch_name>
 
 ---
 
+# **Git Merge Conflicts: How to Solve and Avoid Them**
+
+## **What is a Merge Conflict in Git?**  
+A **merge conflict** occurs when Git is unable to automatically merge changes from two branches due to conflicting modifications in the same file or line of code. This happens when:
+
+- Two branches modify the same line in a file differently.
+- One branch deletes a file that another branch modified.
+
+Git tries to merge the changes, but when it detects conflicts, it stops and asks for manual resolution.
+
+---
+
+## **Example of a Merge Conflict**
+### **Scenario:**  
+1. You have two branches: `main` and `feature-branch`.
+2. Both branches modify the same line in `index.html`.
+3. When merging, Git detects the conflict and stops the process.
+
+### **Conflicting File (Before Resolving)**
+Git marks conflicting sections in the file like this:
+
+```html
+<<<<<<< HEAD
+<h1>Welcome to My Website</h1>
+=======
+<h1>Welcome to Our Website</h1>
+>>>>>>> feature-branch
+```
+
+**Explanation:**
+- `<<<<<<< HEAD` → Code from the current branch (`main`).  
+- `=======` → Separator between conflicting changes.  
+- `>>>>>>> feature-branch` → Code from the other branch (`feature-branch`).  
+
+---
+
+## **How to Resolve a Merge Conflict?**
+
+### **Step 1: Identify Conflicts**
+Run:
+```sh
+git status
+```
+Git will show:
+```
+Unmerged paths:
+  (use "git add <file>" to mark resolution)
+	both modified:   index.html
+```
+
+### **Step 2: Open the Conflicted File**
+- Open `index.html` and **manually** choose the correct version.
+- Either **keep one** or **merge both**.
+
+#### ✅ Example Resolved File:
+```html
+<h1>Welcome to My Awesome Website</h1>
+```
+
+---
+
+### **Step 3: Mark Conflict as Resolved**
+After editing, **add the resolved file**:
+```sh
+git add index.html
+```
+
+### **Step 4: Complete the Merge**
+```sh
+git commit -m "Resolved merge conflict in index.html"
+```
+
+---
+
+## **Aborting a Merge (If Needed)**
+If you want to cancel the merge:
+```sh
+git merge --abort
+```
+🔹 This resets the branch to its previous state.
+
+---
+
+## **Best Practices to Avoid Merge Conflicts**
+
+1. **Pull before making changes:**  
+   ```sh
+   git pull origin main
+   ```
+   Always pull the latest changes before starting new work.
+
+2. **Use feature branches:**  
+   Work in separate branches and merge frequently.
+
+3. **Communicate with teammates:**  
+   Avoid working on the same file at the same time.
+
+4. **Resolve conflicts early:**  
+   Merge changes **frequently** instead of waiting too long.
+
+---
+
+## **Summary**
+
+| Action | Command |
+|--------|---------|
+| **Check for conflicts** | `git status` |
+| **Resolve conflict manually** | Edit the file |
+| **Mark as resolved** | `git add <file>` |
+| **Commit resolution** | `git commit -m "Resolved merge conflict"` |
+| **Abort merge (if needed)** | `git merge --abort` |
+| **Avoid conflicts (best practice)** | `git pull` before coding, use feature branches, commit frequently |
+
+---
+
 ## 🚀 **Conclusion**  
 This guide covers essential Git commands used in day-to-day development. With these commands, you can manage your code efficiently, collaborate with teams, and track project history effectively.
 

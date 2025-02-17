@@ -1,7 +1,7 @@
 # **Software Development Life Cycle (SDLC)**
 
-## **Overview**
 The **Software Development Life Cycle (SDLC)** is a structured process for developing high-quality software. It provides a step-by-step framework that ensures **efficiency, reliability, and scalability** in software development.
+
 
 ![image](https://github.com/user-attachments/assets/e1d50a57-dcae-49e0-8acb-b0a3318ecada)
 

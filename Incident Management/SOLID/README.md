@@ -1,7 +1,5 @@
 # SOLID Principles - Simple Explanation with Amazon Website Example
 
-This README explains the **SOLID** principles in simple terms and how they apply to a real-world example of Amazon's website.
-
 ## What is SOLID?
 SOLID is an acronym for five object-oriented design principles that help software be **more maintainable**, **flexible**, and **easier to understand**. The principles are:
 

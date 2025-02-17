@@ -1,9 +1,5 @@
 # **Monolithic vs. Microservices Architecture**  
 
-This document explains the difference between **Monolithic Architecture** and **Microservices Architecture**, two commonly used approaches in software development for building applications. It includes features, examples, and key differences to help you understand when to choose each approach.
-
----
-
 ## **1. Monolithic Architecture**  
 **Monolithic Architecture** is a **single, unified application** where all components such as UI, business logic, and database are tightly integrated and deployed as one unit.  
 

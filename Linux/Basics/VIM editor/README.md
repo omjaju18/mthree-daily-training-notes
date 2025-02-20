@@ -1,4 +1,4 @@
-# Vim Editor in Linux 
+# Vim Editor in Linux  
 
 Vim is a powerful, widely used text editor in Linux and UNIX-based systems. It is highly configurable and efficient, often favored by programmers and system administrators. Below are some essential commands and tips for using Vim.
 

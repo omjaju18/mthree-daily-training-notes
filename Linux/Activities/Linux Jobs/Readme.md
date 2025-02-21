@@ -1,7 +1,7 @@
 # Ensure fixGenerator.sh is in the home directory
 mv fixGenerator.sh ~/fixGenerator.sh
 
-# Run Monday–Friday at 6am
+# Run Monday–Friday at 6am 
 0 6 * * 1-5 ~/fixGenerator.sh
 
 # Run at 6pm every Friday

@@ -1,3 +1,5 @@
+# Activity - Scheduling and Automation
+
 # Ensure fixGenerator.sh is in the home directory
 mv fixGenerator.sh ~/fixGenerator.sh
 

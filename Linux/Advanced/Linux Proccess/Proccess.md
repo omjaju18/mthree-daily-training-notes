@@ -1,5 +1,5 @@
 # Linux Proccess Commands
-
+ 
 ### 1. **`ps` (Process Status)**  
    - Displays information about running processes.  
 

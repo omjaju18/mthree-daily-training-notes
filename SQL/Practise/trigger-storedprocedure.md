@@ -107,3 +107,94 @@ Both **Stored Procedures and Triggers** enhance database efficiency, security, a
 - Use **procedures** for business logic to keep application code clean.
 - Use **triggers** for automation but avoid excessive use to prevent performance issues.
 - Ensure proper **error handling** in procedures and triggers.
+  ---
+
+
+  # **Indexing in SQL** 🚀  
+
+## **Introduction**  
+Indexing is a technique in databases that **speeds up data retrieval** by creating a structure (like an index in a book) that allows for **faster searching**. Instead of scanning an entire table, the database uses the index to locate data quickly.
+
+---
+
+## **Types of Indexing**  
+
+### **1. Clustered Index**
+- A **clustered index** determines the **physical order** of data in a table.
+- There can be **only one clustered index** per table because the rows can be physically sorted in only one way.
+- The **primary key** of a table **automatically creates a clustered index** (unless specified otherwise).
+
+🔹 **Example of Clustered Index**  
+Let’s say we have a `Students` table:
+
+| Student_ID (PK) | Name  | Age |  
+|-----------------|-------|----|  
+| 101            | Om    | 22 |  
+| 102            | Raj   | 21 |  
+| 103            | Priya | 23 |  
+
+Since `Student_ID` is the **Primary Key**, it **automatically creates a clustered index**, meaning data is **physically stored in the order of `Student_ID`**.
+
+**Creating a Clustered Index manually:**
+```sql
+CREATE CLUSTERED INDEX idx_student_id  
+ON Students(Student_ID);
+```
+
+✅ **Advantages of Clustered Indexing:**  
+- Faster **range-based queries** (`BETWEEN`, `ORDER BY`).  
+- Efficient **sorting** since data is stored in order.  
+
+❌ **Disadvantages of Clustered Indexing:**  
+- **Slower inserts/updates/deletes** because data has to be rearranged.  
+- **Only one clustered index per table** (as it affects physical order).  
+
+---
+
+### **2. Non-Clustered Index**
+- A **non-clustered index** does not affect the physical storage order of data.
+- It creates a separate **lookup table** that stores pointers to the actual data.
+- There can be **multiple non-clustered indexes** on a single table.
+
+🔹 **Example of Non-Clustered Index**  
+Suppose we frequently search for students by **Name**, but our primary key is `Student_ID`.
+
+**Creating a Non-Clustered Index on Name:**
+```sql
+CREATE INDEX idx_student_name  
+ON Students(Name);
+```
+Now, if we run:
+```sql
+SELECT * FROM Students WHERE Name = 'Om';
+```
+The database **quickly looks up** the index instead of scanning the whole table.
+
+✅ **Advantages of Non-Clustered Indexing:**  
+- **Faster searches** for non-primary key columns.  
+- **Multiple non-clustered indexes** can exist per table.  
+
+❌ **Disadvantages of Non-Clustered Indexing:**  
+- Takes **extra storage** space.  
+- **Slower writes (INSERT, UPDATE, DELETE)** because indexes must be updated.
+
+---
+
+### **Clustered vs. Non-Clustered Index: Key Differences**
+| Feature              | Clustered Index | Non-Clustered Index |
+|----------------------|----------------|---------------------|
+| **Physical Storage** | Sorts & stores data in order | Stores separately, uses pointers |
+| **Number per Table** | Only **one** | **Multiple** allowed |
+| **Speed for Retrieval** | Faster for **range queries** | Faster for **specific searches** |
+| **Speed for Updates** | Slower (needs reordering) | Faster (less reordering) |
+| **Example** | Primary Key (`Student_ID`) | Searching by `Name` |
+
+---
+
+## **Conclusion**
+- **Clustered Index** = **Physically sorts data**, faster for range queries, but only one per table.
+- **Non-Clustered Index** = **Uses pointers**, multiple allowed, faster for exact lookups.
+
+Would you like an example on **how indexing improves query performance**? 🚀
+
+

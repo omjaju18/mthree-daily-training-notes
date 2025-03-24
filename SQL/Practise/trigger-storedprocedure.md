@@ -262,4 +262,21 @@ These functions perform mathematical calculations.
 
 Would you like an example query using these functions? 🚀
 
+Question #17:
+What is the difference between primary key, unique key and foreign key
+
+Question Level: Expect this question for beginner and intermediate level role.
+
+Primary key, unique key and foreign key are constraints we can create on a table. 
+
+When you make a column in the table as primary key then this column will always have unique or distinct values. Duplicate values and NULL value will not be allowed in a primary key column. A table can only have one primary key. Primary key can be created either on one single column or a group of columns.
+
+When you make a column in the table as unique key then this column will always have unique or distinct values. Duplicate values will not be allowed. However, NULL values are allowed in a column which has unique key constraint. This is the major difference between primary and unique key. 
+
+Foreign key is used to create a master child kind of relationship between two tables. When we make a column in a table as foreign key, this column will then have to be referenced from another column from some other table.
+
+Imagine we have two tables A and B. Both have just 1 column let’s call it COLUMN_1. If we create foreign key in COLUMN_1 of table A which references the COLUMN_1 from table B then the only values COLUMN_1 in table A can have is the values which are already present in COLUMN_1 of table B. 
+
+This means table B becomes the master table and table A is the child table. COLUMN_1 of Table A can only have values which are already present in COLUMN_1 of table B. 
+
 

@@ -197,4 +197,69 @@ The database **quickly looks up** the index instead of scanning the whole table.
 
 Would you like an example on **how indexing improves query performance**? 🚀
 
+---
+
+### **What is a Database Function?**
+A **database function** is a built-in function provided by a database management system (DBMS) to perform calculations, manipulate data, or process queries within a database.
+
+---
+
+### **Types of Database Functions**
+#### **1. Aggregate Functions (Work on Multiple Rows)**
+These functions perform operations on a group of values and return a single result.
+
+| Function  | Description | Example |
+|-----------|------------|---------|
+| `SUM()`   | Adds up all values in a column | `SELECT SUM(price) FROM orders;` |
+| `AVG()`   | Calculates the average of values | `SELECT AVG(salary) FROM employees;` |
+| `COUNT()` | Counts the number of rows | `SELECT COUNT(*) FROM customers;` |
+| `MAX()`   | Returns the highest value | `SELECT MAX(salary) FROM employees;` |
+| `MIN()`   | Returns the lowest value | `SELECT MIN(price) FROM products;` |
+
+---
+
+#### **2. String Functions (Manipulate Text)**
+These functions help in handling string operations.
+
+| Function  | Description | Example |
+|-----------|------------|---------|
+| `UPPER()` | Converts text to uppercase | `SELECT UPPER(name) FROM users;` |
+| `LOWER()` | Converts text to lowercase | `SELECT LOWER(email) FROM users;` |
+| `CONCAT()` | Joins two strings | `SELECT CONCAT(first_name, ' ', last_name) FROM employees;` |
+| `LENGTH()` | Returns the length of a string | `SELECT LENGTH(name) FROM customers;` |
+| `SUBSTRING()` | Extracts part of a string | `SELECT SUBSTRING(name, 1, 3) FROM employees;` |
+
+---
+
+#### **3. Date & Time Functions**
+These functions handle date and time manipulation.
+
+| Function  | Description | Example |
+|-----------|------------|---------|
+| `NOW()`   | Returns the current date and time | `SELECT NOW();` |
+| `CURDATE()` | Returns the current date | `SELECT CURDATE();` |
+| `CURTIME()` | Returns the current time | `SELECT CURTIME();` |
+| `DATE_FORMAT()` | Formats a date | `SELECT DATE_FORMAT(NOW(), '%Y-%m-%d');` |
+
+---
+
+#### **4. Mathematical Functions**
+These functions perform mathematical calculations.
+
+| Function  | Description | Example |
+|-----------|------------|---------|
+| `ROUND()` | Rounds a number to a specified decimal place | `SELECT ROUND(23.678, 2);` |
+| `CEIL()`  | Rounds up to the nearest integer | `SELECT CEIL(4.2);` |
+| `FLOOR()` | Rounds down to the nearest integer | `SELECT FLOOR(4.8);` |
+| `MOD()`   | Returns the remainder of division | `SELECT MOD(10, 3);` |
+
+---
+
+### **Why Use Database Functions?**
+✔ **Optimize Queries** – Perform calculations directly in SQL instead of application code.  
+✔ **Improve Performance** – Reduce the need for fetching raw data and processing it in the application.  
+✔ **Data Manipulation** – Easily modify text, dates, and numbers within queries.  
+
+Would you like an example query using these functions? 🚀
+
 

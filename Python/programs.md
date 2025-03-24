@@ -33,14 +33,14 @@ else:
 
 ### **3️⃣ Find factorial (Recursion & Iterative)**
 ```python
-# Iterative approach
-num = int(input("Enter a number: "))  
-fact = 1
-
-for i in range(1, num + 1):  # Multiply numbers from 1 to num
-    fact *= i
-
-print("Factorial:", fact)
+def fact_num(n):
+    if (n==0 or n==1):
+        return 1
+    else:
+        return n * fact_num(n-1)
+    
+print(fact_num(5))
+    
 ```
 
 ---

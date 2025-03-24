@@ -140,5 +140,86 @@ A table is in **3NF** if:
 ✔ **Improves data consistency & integrity**  
 ✔ **Better query performance**  
 
-🚀 **Would you like to explore Boyce-Codd Normal Form (BCNF) and beyond?** 😃
+---
 
+You're on the right track! Let's break it down properly step by step:  
+
+---
+
+### **1st Normal Form (1NF) - Ensure Atomicity**  
+Each column must contain atomic (indivisible) values. In the given table, the **DeliveryAddress** column is a composite value (street, city, etc.).  
+
+So, we **split the address** into separate fields like **Street, City, and ZipCode** to make it atomic.  
+
+**Updated Table (1NF)**  
+| OrderID | CustomerName | PhoneNumber  | Product         | Quantity | Price  | Street         | City      | ZipCode  |
+|---------|-------------|-------------|----------------|----------|--------|---------------|----------|--------|
+| 1       | Alice       | 9876543210  | Laptop         | 1        | 60000  | Green Street  | Delhi    | 110001 |
+| 1       | Alice       | 9876543210  | Mouse          | 1        | 1500   | Green Street  | Delhi    | 110001 |
+| 2       | Bob         | 8765432109  | Keyboard       | 1        | 2000   | Blue Avenue   | Mumbai   | 400001 |
+| 3       | Charlie     | 7654321098  | Monitor        | 2        | 15000  | Red Road      | Bangalore| 560001 |
+| 3       | Charlie     | 7654321098  | Laptop Stand   | 1        | 2500   | Red Road      | Bangalore| 560001 |
+
+---
+
+### **2nd Normal Form (2NF) - Remove Partial Dependencies**  
+**Issue:** In the current table, **CustomerName and PhoneNumber depend only on OrderID**, not on Product.  
+👉 **Solution:** Separate customers and orders into different tables.  
+
+#### **Customers Table (2NF)**
+| CustomerID | CustomerName | PhoneNumber |
+|------------|-------------|-------------|
+| 1          | Alice       | 9876543210  |
+| 2          | Bob         | 8765432109  |
+| 3          | Charlie     | 7654321098  |
+
+#### **Orders Table (2NF)**
+| OrderID | CustomerID | Street        | City      | ZipCode  |
+|---------|-----------|--------------|----------|--------|
+| 1       | 1         | Green Street  | Delhi    | 110001 |
+| 2       | 2         | Blue Avenue   | Mumbai   | 400001 |
+| 3       | 3         | Red Road      | Bangalore| 560001 |
+
+#### **OrderDetails Table (2NF)**
+| OrderID | Product        | Quantity | Price  |
+|---------|---------------|----------|--------|
+| 1       | Laptop        | 1        | 60000  |
+| 1       | Mouse         | 1        | 1500   |
+| 2       | Keyboard      | 1        | 2000   |
+| 3       | Monitor       | 2        | 15000  |
+| 3       | Laptop Stand  | 1        | 2500   |
+
+---
+
+### **3rd Normal Form (3NF) - Remove Transitive Dependencies**  
+Now, we check if **non-key columns depend on other non-key columns**.  
+**Issue:** Product prices are dependent on ProductName, not OrderID.  
+👉 **Solution:** Move product details to a **Products Table**.
+
+#### **Products Table (3NF)**
+| ProductID | ProductName    | Price  |
+|-----------|--------------|--------|
+| 1         | Laptop       | 60000  |
+| 2         | Mouse        | 1500   |
+| 3         | Keyboard     | 2000   |
+| 4         | Monitor      | 15000  |
+| 5         | Laptop Stand | 2500   |
+
+#### **Final OrderDetails Table (3NF)**
+| OrderID | ProductID | Quantity |
+|---------|----------|----------|
+| 1       | 1        | 1        |
+| 1       | 2        | 1        |
+| 2       | 3        | 1        |
+| 3       | 4        | 2        |
+| 3       | 5        | 1        |
+
+---
+
+### **Final Normalized Database Schema**
+✅ **Customers (CustomerID, CustomerName, PhoneNumber)**  
+✅ **Orders (OrderID, CustomerID, Street, City, ZipCode)**  
+✅ **Products (ProductID, ProductName, Price)**  
+✅ **OrderDetails (OrderID, ProductID, Quantity)**  
+
+Now, your database follows **3rd Normal Form (3NF)**! 🚀 🎯

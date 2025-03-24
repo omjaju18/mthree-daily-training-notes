@@ -17,17 +17,16 @@ else:
 
 ### **2️⃣ Check if a number is prime**
 ```python
-num = int(input("Enter a number: "))  
+num = int(input("Enter the number: "))  # Take input from user
 
-if num < 2:
-    print("Not Prime")  # Numbers less than 2 are not prime
+
+for i in range (2,num):
+    if num%i == 0:
+        print("Not Prime")
+        break
 else:
-    is_prime = True  
-    for i in range(2, int(num ** 0.5) + 1):  # Check divisibility
-        if num % i == 0:
-            is_prime = False
-            break
-    print("Prime" if is_prime else "Not Prime")  # Print result
+    print("Prime")
+
 ```
 
 ---

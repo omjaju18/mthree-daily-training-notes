@@ -221,4 +221,49 @@
    ```bash
    strace -p 1234
    ```
+
+### **`pgrep` – Process Grep**  
+`pgrep` is a Linux command that searches for processes based on their **name** and returns their **Process ID (PID)**. It’s more efficient than `ps aux | grep` because it directly queries the system’s process table.
+
+---
+
+### **Basic Usage**
+```bash
+pgrep myapp
+```
+🔹 Finds and prints the PID of **all running** processes with the name `myapp`.  
+
+---
+
+### **Common Options**
+| Option | Description |
+|--------|-------------|
+| `-x` | Matches **exact** process name. (`pgrep -x nginx` won’t match `nginx-worker`) |
+| `-l` | Shows **PID and process name** (`pgrep -l nginx`) |
+| `-u user` | Finds processes running under a specific **user** (`pgrep -u root`) |
+| `-f` | Searches for processes **including full command line** (`pgrep -f "python myscript.py"`) |
+
+---
+
+### **Example Usage**
+#### **1️⃣ Find the PID of `nginx`**
+```bash
+pgrep -x nginx
+```
+✔ Returns **only** the main `nginx` process PID.
+
+#### **2️⃣ Find PIDs of all Java processes**
+```bash
+pgrep -l java
+```
+✔ Shows **all** running Java processes with their names.
+
+#### **3️⃣ Kill a process using `pgrep`**
+```bash
+kill -9 $(pgrep -x myapp)
+```
+✔ Finds and forcefully **kills** `myapp`.
+
+---
+
    Traces system calls of process `1234`.

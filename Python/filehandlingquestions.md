@@ -190,11 +190,207 @@ else:
 
 ---
 
-### **Final Thoughts**  
-These **Production Support File Handling Scenarios** test:  
-✅ **Log Analysis & Monitoring**  
-✅ **Automation & Housekeeping**  
-✅ **Error Handling & Recovery**  
-✅ **Process Management**  
+Here are more **scenario-based questions** for **file handling in Python**, specifically for a **Production Support** role:
 
-Would you like **more scenario-based questions** related to **incident management or real-time alerting**? 🚀
+---
+
+## **9. Parsing a Configuration File and Validating Settings**
+🔹 **Scenario:**  
+Your application reads configurations from a `config.ini` file. Sometimes, due to human error, certain required fields are missing, leading to production failures. You need to write a script that **validates if all required keys are present** in the file.  
+
+💡 **How would you ensure the configuration file is valid before the application starts?**  
+
+✅ **Solution:**  
+```python
+import configparser
+
+required_keys = {"database", "host", "port", "username", "password"}
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+if "DEFAULT" in config:
+    missing_keys = required_keys - set(config["DEFAULT"].keys())
+    if missing_keys:
+        print(f"Missing keys: {missing_keys}")
+    else:
+        print("Configuration file is valid.")
+else:
+    print("Configuration section missing.")
+```
+🛠 **Follow-up:** How would you handle missing or incorrect data types (e.g., `port` should be an integer)?
+
+---
+
+## **10. Detecting and Handling Corrupt Log Files**  
+🔹 **Scenario:**  
+Your production system generates log files every hour. Sometimes, logs become corrupted (e.g., **truncated lines, missing timestamps, or binary characters**). You need to scan logs and **flag corrupt entries**.  
+
+💡 **How would you detect corruption in log files?**  
+
+✅ **Solution:**  
+```python
+import re
+
+log_file = "server.log"
+pattern = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} - (INFO|ERROR|WARNING) - .+$")
+
+with open(log_file, "r", encoding="utf-8", errors="replace") as file:
+    for line in file:
+        if not pattern.match(line):
+            print(f"Corrupt entry detected: {line.strip()}")
+```
+🛠 **Follow-up:** How would you automate a **self-healing mechanism** to fix corrupted logs?
+
+---
+
+## **11. Recovering Missing Log Entries from Backups**  
+🔹 **Scenario:**  
+A production outage caused logs between **1 PM and 2 PM** to be lost. However, backups are stored in `/backup/logs/`. You need to **restore missing logs** from backups into the main log file.  
+
+💡 **How would you do this?**  
+
+✅ **Solution:**  
+```python
+import shutil
+
+backup_dir = "/backup/logs/"
+main_log_file = "/var/logs/app.log"
+
+# Copy backup logs for the missing time range
+shutil.copy(backup_dir + "app-2025-03-25-13.log", main_log_file)
+shutil.copy(backup_dir + "app-2025-03-25-14.log", main_log_file)
+print("Logs restored successfully.")
+```
+🛠 **Follow-up:** How would you **automate this process** to check missing logs dynamically?
+
+---
+
+## **12. Identifying Unauthorized File Modifications**
+🔹 **Scenario:**  
+Critical files in `/etc/app/` should **not** be modified manually. However, unauthorized changes have been detected. You need a Python script to **compare file checksums** and alert if changes occur.  
+
+💡 **How would you detect unauthorized modifications?**  
+
+✅ **Solution:**  
+```python
+import hashlib
+
+def get_checksum(file_path):
+    with open(file_path, "rb") as f:
+        return hashlib.sha256(f.read()).hexdigest()
+
+file_path = "/etc/app/config.cfg"
+expected_checksum = "abcd1234xyz..."  # Store this from a trusted state
+
+if get_checksum(file_path) != expected_checksum:
+    print("ALERT: Unauthorized modification detected!")
+```
+🛠 **Follow-up:** How can you **automatically restore** the file if tampered with?
+
+---
+
+## **13. Merging Multiple Log Files Chronologically**
+🔹 **Scenario:**  
+Your application generates **hourly logs**, but an analysis tool requires **all logs merged in order**. The logs are stored as:  
+```
+app-2025-03-25-00.log
+app-2025-03-25-01.log
+...
+app-2025-03-25-23.log
+```
+You need to **merge them into a single log file in chronological order**.  
+
+💡 **How would you handle this?**  
+
+✅ **Solution:**  
+```python
+import glob
+
+log_files = sorted(glob.glob("app-2025-03-25-*.log"))  # Sort to ensure order
+with open("merged_logs.log", "w") as output:
+    for file in log_files:
+        with open(file, "r") as log:
+            output.write(log.read() + "\n")
+
+print("Logs merged successfully.")
+```
+🛠 **Follow-up:** How would you handle duplicate entries in logs?
+
+---
+
+## **14. Finding Files with Specific Content (Search within Files)**  
+🔹 **Scenario:**  
+A production bug occurred where certain log files contain `"Segmentation Fault"`. You need to search all logs in `/var/logs/` and **list files containing this keyword**.  
+
+💡 **How would you efficiently find these files?**  
+
+✅ **Solution:**  
+```python
+import os
+
+log_dir = "/var/logs/"
+search_term = "Segmentation Fault"
+
+for file in os.listdir(log_dir):
+    file_path = os.path.join(log_dir, file)
+    if os.path.isfile(file_path):
+        with open(file_path, "r", errors="ignore") as f:
+            if search_term in f.read():
+                print(f"Found in: {file_path}")
+```
+🛠 **Follow-up:** How would you optimize this for **large log files**?
+
+---
+
+## **15. Tracking File Growth in Real-Time**  
+🔹 **Scenario:**  
+A production log file **should not exceed 1GB**. If it does, a new log file should be created (`logfile_1.log`, `logfile_2.log`, etc.).  
+
+💡 **How would you track file growth and rotate logs?**  
+
+✅ **Solution:**  
+```python
+import os
+
+log_file = "app.log"
+max_size = 1 * 1024 * 1024 * 1024  # 1GB
+
+if os.path.exists(log_file) and os.path.getsize(log_file) > max_size:
+    os.rename(log_file, f"{log_file}.1")
+    open(log_file, "w").close()  # Create a new empty log file
+    print("Log rotated.")
+```
+🛠 **Follow-up:** How would you integrate this with **log rotation policies** like `logrotate`?
+
+---
+
+## **16. Sending Alerts When a Critical File is Deleted**
+🔹 **Scenario:**  
+Your application depends on `/var/data/important.csv`. If this file gets deleted, an alert should be **immediately triggered**.  
+
+💡 **How would you monitor and alert if the file is missing?**  
+
+✅ **Solution:**  
+```python
+import os
+import time
+
+file_path = "/var/data/important.csv"
+
+while True:
+    if not os.path.exists(file_path):
+        print(f"ALERT: {file_path} has been deleted!")
+        break
+    time.sleep(10)  # Check every 10 seconds
+```
+🛠 **Follow-up:** How can you integrate this with **email or Slack alerts**?
+
+---
+
+### **Final Thoughts**  
+These **scenario-based questions** test your ability to:  
+✅ **Troubleshoot production issues**  
+✅ **Automate log & file management**  
+✅ **Detect & recover from failures**  
+✅ **Enhance system observability**  
+
